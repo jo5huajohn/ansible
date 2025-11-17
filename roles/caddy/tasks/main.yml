@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for caddy
+- name: Create caddy directory
+  ansible.builtin.file:
+    path: "{{ caddy_dir }}"
+    state: directory
+    mode: '0770'
+
+# See https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes
+- name: Set rmem_max
+  ansible.posix.sysctl:
+    name: net.core.rmem_max
+    value: '7500000'
+    state: present
+    reload: true
+
+- name: Set wmem_max
+  ansible.posix.sysctl:
+    name: net.core.wmem_max
+    value: '7500000'
+    state: present
+    reload: true
+
+- name: Copy docker-compose file
+  ansible.builtin.copy:
+    src: docker-compose.yml
+    dest: "{{ caddy_dir }}/docker-compose.yml"
+    mode: '0770'
+
+- name: Copy .env file
+  ansible.builtin.template:
+    src: .env.j2
+    dest: "{{ caddy_dir }}/.env"
+    force: true
+    mode: '0770'
+
+- name: Copy Caddyfile
+  ansible.builtin.copy:
+    src: Caddyfile
+    dest: "{{ caddy_dir }}/Caddyfile"
+    mode: '0770'
+
+- name: Start with docker-compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ caddy_dir }}"
+    state: present
