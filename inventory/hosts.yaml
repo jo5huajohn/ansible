@@ -1,0 +1,27 @@
+---
+prod:
+  children:
+    lxc:
+      hosts:
+        authentik:
+          ansible_host: 10.42.20.195
+        caddy:
+          ansible_host: 10.42.20.228
+        nextcloud:
+          ansible_host: 10.42.20.220
+        paperless:
+          ansible_host: 10.42.20.211
+      vars:
+        ansible_user: root
+    vms:
+      hosts:
+        forgejo:
+          ansible_host: 10.42.20.225
+        immich:
+          ansible_host: 10.42.20.244
+        mealie:
+          ansible_host: 10.42.20.203
+      vars:
+        ansible_user: reseau
+  vars:
+    ansible_ssh_private_key_file: /root/.ssh/reseau
