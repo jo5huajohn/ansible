@@ -1,41 +1,24 @@
 {
-  "name": "ansible-dev-container-podman",
+  "name": "ansible-dev-container-codespaces",
   "image": "ghcr.io/ansible/community-ansible-dev-tools:latest",
   "containerUser": "root",
   "runArgs": [
-    "--cap-add=CAP_MKNOD",
-    "--cap-add=NET_ADMIN",
+    "--security-opt",
+    "seccomp=unconfined",
+    "--security-opt",
+    "label=disable",
     "--cap-add=SYS_ADMIN",
     "--cap-add=SYS_RESOURCE",
     "--device",
     "/dev/fuse",
     "--security-opt",
-    "seccomp=unconfined",
-    "--security-opt",
-    "label=disable",
-    "--security-opt",
     "apparmor=unconfined",
-    "--security-opt",
-    "unmask=/sys/fs/cgroup",
-    "--userns=host",
     "--hostname=ansible-dev-container"
   ],
+  "updateRemoteUserUID": true,
   "customizations": {
     "vscode": {
-      "extensions": ["redhat.ansible",
-        "redhat.authentication",
-        "redhat.vscode-yaml",
-        "ms-python.debugpy",
-        "ms-python.vscode-pylance",
-        "ms-python.python",
-        "ms-python.vscode-python-envs"
-      ],
-      "settings": {
-        "ansible.python.interpreterPath": "/usr/bin/python",
-		    "python.useEnvironmentsExtension": true,
-		    "python-envs.pythonProjects": [],
-		    "python-envs.defaultEnvManager": "ms-python.python:system"
-      }
+      "extensions": ["redhat.ansible","redhat.vscode-redhat-account", "redhat.vscode-yaml"]
     }
   }
 }
