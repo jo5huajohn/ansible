@@ -18,7 +18,10 @@
   "updateRemoteUserUID": true,
   "customizations": {
     "vscode": {
-      "extensions": ["redhat.ansible","redhat.vscode-redhat-account", "redhat.vscode-yaml"]
+      "extensions": ["redhat.ansible","redhat.vscode-redhat-account", "redhat.vscode-yaml"],
+      "settings": {
+        "ansible.python.interpreterPath": "/bin/python"
+      }
     }
   }
 }
