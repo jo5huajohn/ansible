@@ -4,11 +4,18 @@ collections:
     version: 2.1.0
   - name: community.docker
     version: 4.8.2
-  - name: forgejo.forgejo
-    version: 1.0.0
+  - name: community.general
+    version: 11.4.1
+  - name: https://github.com/k3s-io/k3s-ansible.git
+    type: git          
+    version: 1.1.0
+  - name: kubernetes.core
+    version: 6.2.0
 
 roles:
   - name: geerlingguy.docker
     version: 7.8.0
+  - name: geerlingguy.pip
+    version: 3.1.1
   - name: paperless_ngx.paperless_ngx
     version: 4.1.0
