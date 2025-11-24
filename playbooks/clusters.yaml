@@ -1,0 +1,33 @@
+---
+- name: Setup k3s requirements
+  hosts: hardware
+  become: true
+  tasks:
+    - name: Disable firewall
+      ansible.builtin.systemd_service:
+        name: firewalld
+        state: stopped
+        daemon_reload: true
+
+- name: Setup k3s server
+  hosts: server
+  become: true
+  tasks:
+    - name: Setup k3s
+      ansible.builtin.include_role:
+        name: k3s.orchestration.k3s_server
+
+    - name: Install prerequisites
+      ansible.builtin.dnf:
+        name:
+          - helm
+          - python3-kubernetes
+        state: present
+
+- name: Setup k3s agent
+  hosts: agent
+  become: true
+  tasks:
+    - name: Setup k3s
+      ansible.builtin.include_role:
+        name: k3s.orchestration.k3s_agent
