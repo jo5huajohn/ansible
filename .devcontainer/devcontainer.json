@@ -1,5 +1,5 @@
 {
-  "name": "ansible-dev-container-codespaces",
+  "name": "lab42-ansible",
   "image": "ghcr.io/ansible/community-ansible-dev-tools:latest",
   "containerUser": "root",
   "runArgs": [
