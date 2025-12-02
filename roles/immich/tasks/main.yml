@@ -1,0 +1,58 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for immich
+- name: Create immich-app directory
+  ansible.builtin.file:
+    path: "{{ immich_app_dir }}"
+    state: directory
+    mode: '0770'
+
+- name: Copy docker-compose file
+  ansible.builtin.copy:
+    src: docker-compose.yml
+    dest: "{{ immich_app_dir }}/docker-compose.yml"
+    mode: '0770'
+
+- name: Download Immich hwaccel.ml file
+  ansible.builtin.get_url:
+    url: https://github.com/immich-app/immich/releases/latest/download/hwaccel.ml.yml
+    dest: "{{ immich_app_dir }}/hwaccel.ml.yml"
+    mode: '0770'
+
+- name: Template Immich .env file
+  ansible.builtin.template:
+    src: docker-compose.env.j2
+    dest: "{{ immich_app_dir }}/.env"
+    mode: '0770'
+
+- name: Create Immich library mount point
+  ansible.builtin.file:
+    path: "{{ immich_app_dir }}/library"
+    state: directory
+
+- name: Format disk to ext4
+  ansible.builtin.filesystem:
+    fstype: ext4
+    dev: /dev/sdb
+  when: disk_format_required | default(true)
+  become: true
+
+- name: Mount the disk
+  ansible.posix.mount:
+    path: "{{ immich_app_dir }}/library"
+    src: /dev/sdb
+    fstype: ext4
+    opts: defaults
+    state: mounted
+  become: true
+
+- name: Enable memory overcommit workaround for immich_redis. See https://github.com/jemalloc/jemalloc/issues/1328.
+  ansible.posix.sysctl:
+    name: vm.overcommit_memory
+    value: 1
+  become: true
+
+- name: Start Immich with docker-compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ immich_app_dir }}"
+    state: present

@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: MIT-0
+---
+# defaults file for immich
+immich_app_dir: "/home/{{ ansible_user }}/immich-app"
+immich_upload_location: "/home/{{ ansible_user }}/immich-app/library"
+immich_timezone: America/Chicago

@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for nextcloud
+- name: Run Nextcloud AIO mastercontainer
+  community.docker.docker_container:
+    name: nextcloud-aio-mastercontainer
+    image: ghcr.io/nextcloud-releases/all-in-one:latest
+    state: started
+    restart_policy: always
+    published_ports:
+      - "8080:8080"
+    env:
+      APACHE_PORT: "11000"
+      APACHE_IP_BINDING: "0.0.0.0"
+      APACHE_ADDITIONAL_NETWORK: ""
+      NEXTCLOUD_DATADIR: "/mnt/ncdata"
+      NEXTCLOUD_URL: "https://{{ nextcloud_domain }}"
+      SKIP_DOMAIN_VALIDATION: "true"
+    volumes:
+      - "nextcloud_aio_mastercontainer:/mnt/docker-aio-config"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    init: true
