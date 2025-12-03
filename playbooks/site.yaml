@@ -1,0 +1,58 @@
+---
+- name: Install docker on all servers
+  hosts: prod
+  become: true
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install docker
+      ansible.builtin.include_role:
+        name: geerlingguy.docker
+
+- name: Install authentik
+  hosts: authentik
+  tasks:
+    - name: Install authentik
+      ansible.builtin.include_role:
+        name: authentik
+
+- name: Install caddy
+  hosts: caddy
+  tasks:
+    - name: Install caddy-cloudflare
+      ansible.builtin.include_role:
+        name: caddy
+
+- name: Install immich
+  hosts: immich
+  tasks:
+    - name: Install immich
+      ansible.builtin.include_role:
+        name: immich
+
+- name: Install mealie
+  hosts: mealie
+  tasks:
+    - name: Install mealie
+      ansible.builtin.include_role:
+        name: mealie
+
+- name: Install nextcloud
+  hosts: nextcloud
+  tasks:
+    - name: Install nextcloud
+      ansible.builtin.include_role:
+        name: nextcloud
+
+- name: Install paperless
+  hosts: paperless
+  tasks:
+    - name: Install pip
+      ansible.builtin.include_role:
+        name: geerlingguy.pip
+
+    - name: Install paperless
+      ansible.builtin.include_role:
+        name: paperless_ngx.paperless_ngx
