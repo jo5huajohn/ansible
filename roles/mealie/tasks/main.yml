@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for mealie
+- name: Create mealie directory
+  ansible.builtin.file:
+    path: "{{ mealie_dir }}"
+    state: directory
+  become: true
+
+- name: Copy docker-compose file
+  ansible.builtin.copy:
+    src: docker-compose.yml
+    dest: "{{ mealie_dir }}/docker-compose.yml"
+  become: true
+
+- name: Template .env file
+  ansible.builtin.template:
+    src: docker-compose.env.j2
+    dest: "{{ mealie_dir }}/.env"
+  become: true
+
+- name: Deploy mealie with docker-compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ mealie_dir }}"
+    state: present
+  become: true
