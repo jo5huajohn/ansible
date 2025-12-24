@@ -1,15 +1,13 @@
 services:
   caddy:
     image: caddybuilds/caddy-cloudflare:latest
+    container_name: caddy
     restart: unless-stopped
+    network_mode: "service:ts-caddy"
+    depends_on:
+      - ts-caddy
     cap_add:
-      - NET_ADMIN
-    networks:
-      - shared_net
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
+      - net_admin
     env_file:
       - .env
     volumes:
@@ -18,10 +16,22 @@ services:
       - caddy_data:/data
       - caddy_config:/config
 
-networks:
-  shared_net:
-    external: true
+  ts-caddy:
+    image: tailscale/tailscale:latest
+    hostname: ts-caddy
+    env_file:
+      - .env
+    volumes:
+      - tailscale-data:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+      - sys_module
+    restart: unless-stopped
 
 volumes:
   caddy_data:
   caddy_config:
+  tailscale-data:
+    driver: local
