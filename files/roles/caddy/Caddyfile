@@ -7,45 +7,24 @@
 authentik.lab42.me {
 	import cloudflare
 	encode zstd gzip
-	log {
-		output file /var/log/caddy/authentik.log
-	}
 	reverse_proxy 10.42.20.195:9000
-}
-
-forgejo.lab42.me {
-	import cloudflare
-	encode zstd gzip
-	log {
-		output file /var/log/caddy/forgejo.log
-	}
-	reverse_proxy 10.42.20.225:3000
 }
 
 immich.lab42.me {
 	import cloudflare
 	encode zstd gzip
-	log {
-		output file /var/log/caddy/immich.log
-	}
 	reverse_proxy 10.42.20.244:2283
 }
 
 mealie.lab42.me {
 	import cloudflare
 	encode zstd gzip
-	log {
-		output file /var/log/caddy/mealie.log
-	}
 	reverse_proxy 10.42.20.203:9925
 }
 
 nextcloud.lab42.me {
 	import cloudflare
 	encode zstd gzip
-	log {
-		output file /var/log/caddy/nextcloud.log
-	}
 	redir /.well-known/carddav /remote.php/dav/ 301
     redir /.well-known/caldav /remote.php/dav/ 301
 
@@ -55,8 +34,5 @@ nextcloud.lab42.me {
 paperless.lab42.me {
 	import cloudflare
 	encode zstd gzip
-	log {
-		output file /var/log/caddy/paperless.log
-	}
 	reverse_proxy 10.42.20.211:8000
 }
