@@ -46,12 +46,6 @@
     state: mounted
   become: true
 
-- name: Enable memory overcommit workaround for immich_redis. See https://github.com/jemalloc/jemalloc/issues/1328.
-  ansible.posix.sysctl:
-    name: vm.overcommit_memory
-    value: 1
-  become: true
-
 - name: Start Immich with docker-compose
   community.docker.docker_compose_v2:
     project_src: "{{ immich_app_dir }}"

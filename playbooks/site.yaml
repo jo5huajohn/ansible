@@ -34,6 +34,13 @@
 - name: Install immich
   hosts: immich
   tasks:
+      # See https://github.com/jemalloc/jemalloc/issues/1328
+    - name: Enable memory overcommit workaround for immich_redis
+      ansible.posix.sysctl:
+        name: vm.overcommit_memory
+        value: 1
+      become: true
+
     - name: Install immich
       ansible.builtin.include_role:
         name: immich
