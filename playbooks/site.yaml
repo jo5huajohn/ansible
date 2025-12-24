@@ -21,6 +21,12 @@
 - name: Install caddy
   hosts: caddy
   tasks:
+    - name: Copy Caddyfile
+      ansible.builtin.copy:
+        src: ../files/roles/caddy/Caddyfile
+        dest: "{{ caddy_dir }}/Caddyfile"
+        mode: '0770'
+
     - name: Install caddy-cloudflare
       ansible.builtin.include_role:
         name: caddy
@@ -28,6 +34,13 @@
 - name: Install immich
   hosts: immich
   tasks:
+      # See https://github.com/jemalloc/jemalloc/issues/1328
+    - name: Enable memory overcommit workaround for immich_redis
+      ansible.posix.sysctl:
+        name: vm.overcommit_memory
+        value: 1
+      become: true
+
     - name: Install immich
       ansible.builtin.include_role:
         name: immich

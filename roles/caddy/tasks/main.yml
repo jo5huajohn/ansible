@@ -37,12 +37,6 @@
     force: true
     mode: '0770'
 
-- name: Copy Caddyfile
-  ansible.builtin.copy:
-    src: Caddyfile
-    dest: "{{ caddy_dir }}/Caddyfile"
-    mode: '0770'
-
 - name: Start with docker-compose
   community.docker.docker_compose_v2:
     project_src: "{{ caddy_dir }}"
