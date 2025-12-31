@@ -17,21 +17,22 @@
   ansible.builtin.get_url:
     url: https://github.com/immich-app/immich/releases/latest/download/hwaccel.ml.yml
     dest: "{{ immich_app_dir }}/hwaccel.ml.yml"
-    mode: '0770'
+    mode: '0660'
 
 - name: Template Immich .env file
   ansible.builtin.template:
     src: docker-compose.env.j2
     dest: "{{ immich_app_dir }}/.env"
-    mode: '0770'
+    mode: '0660'
 
 - name: Create Immich library mount point
   ansible.builtin.file:
     path: "{{ immich_app_dir }}/library"
     state: directory
+    mode: '0660'
 
 - name: Format disk to ext4
-  ansible.builtin.filesystem:
+  community.general.filesystem:
     fstype: ext4
     dev: /dev/sdb
   when: disk_format_required | default(true)

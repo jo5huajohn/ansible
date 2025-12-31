@@ -27,6 +27,7 @@
       }
     }
   },
+  "postCreateCommand": "pip install pre-commit; pre-commit install",
 	"mounts": [
 	    "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
 	]
