@@ -11,6 +11,8 @@ prod:
           ansible_host: 10.42.20.220
         paperless:
           ansible_host: 10.42.20.211
+        traefik:
+          ansible_host: 10.42.20.247
     vms:
       hosts:
         immich:
