@@ -15,6 +15,7 @@
     volumes:
       - "{{ traefik_dir }}/traefik.yaml:/etc/traefik/traefik.yaml:ro"
       - "{{ traefik_dir }}/dynamic/:/etc/traefik/dynamic/:ro"
+      - "{{ traefik_dir }}/shared/:/shared/"
       - /etc/localtime:/etc/localtime:ro
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     env_file: "{{ traefik_dir }}/traefik.env"
