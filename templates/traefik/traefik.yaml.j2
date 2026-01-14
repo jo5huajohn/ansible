@@ -1,26 +1,7 @@
-################################################################
-#
-# Configuration sample for Traefik v2.
-#
-# For Traefik v1: https://github.com/traefik/traefik/blob/v1.7/traefik.sample.toml
-#
-################################################################
-
-################################################################
-# Global configuration
-################################################################
 global:
   checkNewVersion: true
   sendAnonymousUsage: true
 
-################################################################
-# EntryPoints configuration
-################################################################
-
-# EntryPoints definition
-#
-# Optional
-#
 entryPoints:
   web:
     address: :80
@@ -33,16 +14,25 @@ entryPoints:
 
   websecure:
     address: :443
+    # Immich requires this
+    transport:
+      respondingTimeouts:
+        readTimeout: 600s
+        idleTimeout: 600s
+        writeTimeout: 600s
     http:
       tls: {}
 
-certificateResolvers:
-  myresolver:
+certificatesResolvers:
+  cf-resolver:
     acme:
+      email: {{ cf_api_email }}
+      storage: /shared/acme.json
       dnsChallenge:
         provider: cloudflare
-        delayBeforeCheck: 0
-      storage: /var/lib/traefik/acme.json
+        resolvers:
+          - "1.0.0.1:53"
+          - "1.1.1.1:53"
 
 ################################################################
 # Traefik logs configuration
@@ -54,7 +44,7 @@ certificateResolvers:
 # Optional
 #
 log:
-  level: INFO
+  level: DEBUG
 
   # Sets the filepath for the traefik log. If not specified, stdout will be used.
   # Intermediate directories are created if necessary.
@@ -132,23 +122,7 @@ api:
 
 providers:
   docker: {}
-    # Docker server endpoint. Can be a tcp or a unix socket endpoint.
-    #
-    # Required
-    # Default: "unix:///var/run/docker.sock"
-    #
-#    endpoint: tcp://10.10.10.10:2375
 
-    # Default host rule.
-    #
-    # Optional
-    # Default: "Host(`{{ normalize .Name }}`)"
-    #
-#    defaultRule: Host(`{{ normalize .Name }}.docker.localhost`)
-
-    # Expose containers by default in traefik
-    #
-    # Optional
-    # Default: true
-    #
-#    exposedByDefault: false
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true

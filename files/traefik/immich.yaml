@@ -1,0 +1,23 @@
+http:
+  routers:
+    immich:
+      entryPoints:
+        - websecure
+      rule: "Host(`immich.lab42.me`)"
+      tls:
+        certResolver: cf-resolver
+      service: immich-service
+
+  services:
+    immich-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.42.20.244:2283"
+        healthCheck:
+          path: ""
+          interval: "10s"
+          timeout: "3s"
+        passiveHealthCheck:
+          failureWindow: "3s"
+          maxFailedAttempts: 3
+        passHostHeader: true
