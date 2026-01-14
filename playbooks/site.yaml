@@ -11,6 +11,43 @@
       ansible.builtin.include_role:
         name: geerlingguy.docker
 
+- name: Install Traefik.
+  hosts: traefik
+  tasks:
+    - name: Create Traefik directory.
+      ansible.builtin.file:
+        path: "{{ traefik_dir }}"
+        state: directory
+        mode: '0770'
+
+    - name: Create Traefik dynamic configurations directory.
+      ansible.builtin.file:
+        path: "{{ traefik_dir }}/dynamic"
+        state: directory
+        mode: '0770'
+
+    - name: Create Traefik env file from template.
+      ansible.builtin.template:
+        src: ../templates/traefik/traefik.env.j2
+        dest: "{{ traefik_dir }}/traefik.env"
+        mode: '0644'
+
+    - name: Create Traefik static config from template.
+      ansible.builtin.template:
+        src: ../templates/traefik/traefik.yaml.j2
+        dest: "{{ traefik_dir }}/traefik.yaml"
+        mode: '0644'
+
+    - name: Copy Traefik dynamic config.
+      ansible.builtin.copy:
+        src: ../files/traefik/immich.yaml
+        dest: "{{ traefik_dir }}/dynamic/immich.yaml"
+        mode: '0644'
+
+    - name: Install Traefik.
+      ansible.builtin.include_role:
+        name: traefik
+
 - name: Install authentik
   hosts: authentik
   tasks:

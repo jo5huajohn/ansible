@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for traefik
+- name: Run Traefik container
+  community.docker.docker_container:
+    name: traefik
+    image: traefik:v3.6
+    state: started
+    restart_policy: unless-stopped
+    recreate: true
+    published_ports:
+      - "8080:8080"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "{{ traefik_dir }}/traefik.yaml:/etc/traefik/traefik.yaml:ro"
+      - "{{ traefik_dir }}/dynamic/:/etc/traefik/dynamic/:ro"
+      - "{{ traefik_dir }}/shared/:/shared/"
+      - /etc/localtime:/etc/localtime:ro
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    env_file: "{{ traefik_dir }}/traefik.env"
