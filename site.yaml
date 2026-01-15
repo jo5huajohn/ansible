@@ -20,12 +20,6 @@
         state: directory
         mode: '0770'
 
-    - name: Create Traefik dynamic configurations directory.
-      ansible.builtin.file:
-        path: "{{ traefik_dir }}/dynamic"
-        state: directory
-        mode: '0770'
-
     - name: Create Traefik env file from template.
       ansible.builtin.template:
         src: templates/traefik/traefik.env.j2
@@ -40,9 +34,9 @@
 
     - name: Copy Traefik dynamic config.
       ansible.builtin.copy:
-        src: files/traefik/immich.yaml
-        dest: "{{ traefik_dir }}/dynamic/immich.yaml"
-        mode: '0644'
+        src: files/traefik/dynamic/
+        dest: "{{ traefik_dir }}/dynamic/"
+        mode: '0770'
 
     - name: Install Traefik.
       ansible.builtin.include_role:
