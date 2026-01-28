@@ -4,19 +4,19 @@ prod:
     lxc:
       hosts:
         authentik:
-          ansible_host: 10.42.20.195
+          ansible_host: authentik.lan
         caddy:
-          ansible_host: 10.42.20.228
+          ansible_host: caddy.lan
         nextcloud:
-          ansible_host: 10.42.20.220
+          ansible_host: nextcloud.lan
         paperless:
-          ansible_host: 10.42.20.211
+          ansible_host: paperless.lan
         traefik:
-          ansible_host: 10.42.20.247
+          ansible_host: traefik.lan
     vms:
       hosts:
         immich:
-          ansible_host: 10.42.20.244
+          ansible_host: 10.42.20.194
         mealie:
           ansible_host: 10.42.20.203
 k8s_prod:
