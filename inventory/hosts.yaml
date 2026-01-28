@@ -16,7 +16,7 @@ prod:
     vms:
       hosts:
         immich:
-          ansible_host: 10.42.20.244
+          ansible_host: 10.42.20.194
         mealie:
           ansible_host: 10.42.20.203
 k8s_prod:
