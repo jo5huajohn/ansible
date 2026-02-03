@@ -3,7 +3,7 @@ http:
     immich:
       entryPoints:
         - websecure
-      rule: "Host(`immich.lab42.me`)"
+      rule: "Host(`immich.dev.lab42.me`)"
       tls:
         certResolver: cf-resolver
       service: immich-service
