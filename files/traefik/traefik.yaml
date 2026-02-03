@@ -26,7 +26,6 @@ entryPoints:
 certificatesResolvers:
   cf-resolver:
     acme:
-      email: {{ cf_api_email }}
       storage: /shared/acme.json
       dnsChallenge:
         provider: cloudflare
@@ -126,3 +125,9 @@ providers:
   file:
     directory: /etc/traefik/dynamic
     watch: true
+
+experimental:
+  plugins:
+    traefik-oidc-auth:
+      moduleName: "github.com/sevensolutions/traefik-oidc-auth"
+      version: "v0.17.0"

@@ -26,9 +26,9 @@
         dest: "{{ traefik_dir }}/traefik.env"
         mode: '0644'
 
-    - name: Create Traefik static config from template.
-      ansible.builtin.template:
-        src: templates/traefik/traefik.yaml.j2
+    - name: Copy Traefik static config.
+      ansible.builtin.copy:
+        src: files/traefik/traefik.yaml
         dest: "{{ traefik_dir }}/traefik.yaml"
         mode: '0644'
 
