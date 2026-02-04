@@ -42,6 +42,33 @@
       ansible.builtin.include_role:
         name: traefik
 
+
+- name: Install Pocket ID.
+  hosts: pocket-id
+  tasks:
+    - name: Create Pocket-Id root and data directory.
+      ansible.builtin.file:
+        path: "{{ pocket_id_data_dir }}"
+        state: directory
+        mode: '0770'
+
+    - name: Copy docker-compose file.
+      ansible.builtin.copy:
+        src: files/pocket-id/docker-compose.yml
+        dest: "{{ pocket_id_dir }}/docker-compose.yml"
+        mode: '0770'
+
+    - name: Template .env file.
+      ansible.builtin.template:
+        src: templates/pocket-id/.env.j2
+        dest: "{{ pocket_id_dir }}/.env"
+        mode: '0660'
+
+    - name: Start with docker-compose.
+      community.docker.docker_compose_v2:
+        project_src: "{{ pocket_id_dir }}"
+        state: present
+
 - name: Install authentik
   hosts: authentik
   tasks:

@@ -13,6 +13,8 @@ prod:
           ansible_host: nextcloud.lan
         paperless:
           ansible_host: paperless.lan
+        pocket-id:
+          ansible_host: pocket-id.lan
         traefik:
           ansible_host: traefik.lan
     vms:
