@@ -1,0 +1,23 @@
+http:
+  routers:
+    pocket-id:
+      entryPoints:
+        - websecure
+      rule: "Host(`id.dev.lab42.me`)"
+      tls:
+        certResolver: cf-resolver
+      service: pocket-id-service
+
+  services:
+    pocket-id-service:
+      loadBalancer:
+        servers:
+          - url: "http://pocket-id.lan:1411"
+        healthCheck:
+          path: ""
+          interval: "1m30s"
+          timeout: "5s"
+        passiveHealthCheck:
+          failureWindow: "3s"
+          maxFailedAttempts: 3
+        passHostHeader: true
