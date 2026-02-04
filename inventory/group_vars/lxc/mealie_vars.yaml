@@ -1,0 +1,20 @@
+---
+mealie_dir: /opt/mealie
+mealie_allow_signup: false
+mealie_puid: 1000
+mealie_pgid: 1000
+mealie_tz: America/Chicago
+mealie_base_url: "https://mealie.{{ domain_name }}"
+mealie_db_engine: postgres
+
+mealie_postgres_user: mealie
+mealie_postgres_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          63393937633863316332353661333239356337643533316439336234366165373037653065353066
+          3439633935316338303834343465633861633833323232330a663436323937303861336361303931
+          36353961636466393461383638646530323636386134363937366338303462626365393764343463
+          6262316339316532360a333263366636613232643564313435633730383264326232376630643262
+          3432
+mealie_postgres_server: postgres
+mealie_postgres_port: 5432
+mealie_postgres_db: mealie

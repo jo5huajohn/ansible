@@ -1,0 +1,23 @@
+http:
+  routers:
+    mealie:
+      entryPoints:
+        - websecure
+      rule: "Host(`mealie.dev.lab42.me`)"
+      tls:
+        certResolver: cf-resolver
+      service: mealie-service
+
+  services:
+    mealie-service:
+      loadBalancer:
+        servers:
+          - url: "http://mealie.lan:9925"
+        healthCheck:
+          path: "/api/app/about"
+          interval: "30s"
+          timeout: "3s"
+        passiveHealthCheck:
+          failureWindow: "3s"
+          maxFailedAttempts: 3
+        passHostHeader: true
