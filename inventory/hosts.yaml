@@ -7,6 +7,8 @@ prod:
           ansible_host: authentik.lan
         caddy:
           ansible_host: caddy.lan
+        mealie:
+          ansible_host: mealie.lan
         nextcloud:
           ansible_host: nextcloud.lan
         paperless:
@@ -17,8 +19,6 @@ prod:
       hosts:
         immich:
           ansible_host: 10.42.20.194
-        mealie:
-          ansible_host: 10.42.20.203
 k8s_prod:
   children:
     server:
