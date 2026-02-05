@@ -156,10 +156,30 @@
 - name: Install paperless
   hosts: paperless
   tasks:
-    - name: Install pip
-      ansible.builtin.include_role:
-        name: geerlingguy.pip
+    - name: Create paperless directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "{{ paperless_dir }}/data"
+        - "{{ paperless_media_dir }}"
+        - "{{ paperless_dir }}/export"
+        - "{{ paperless_dir }}/consume"
 
-    - name: Install paperless
-      ansible.builtin.include_role:
-        name: paperless_ngx.paperless_ngx
+    - name: Copy docker-compose file.
+      ansible.builtin.copy:
+        src: files/paperless/docker-compose.yaml
+        dest: "{{ paperless_dir }}/docker-compose.yml"
+        mode: "0660"
+
+    - name: Template .env file.
+      ansible.builtin.template:
+        src: templates/paperless/.env.j2
+        dest: "{{ paperless_dir }}/.env"
+        mode: "0660"
+
+    - name: Deploy Paperless-ngx with docker-compose.
+      community.docker.docker_compose_v2:
+        project_src: "{{ paperless_dir }}"
+        state: present
