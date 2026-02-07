@@ -69,13 +69,6 @@
         project_src: "{{ pocket_id_dir }}"
         state: present
 
-- name: Install authentik
-  hosts: authentik
-  tasks:
-    - name: Install authentik
-      ansible.builtin.include_role:
-        name: authentik
-
 - name: Install caddy
   hosts: caddy
   tasks:

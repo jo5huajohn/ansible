@@ -3,8 +3,6 @@ prod:
   children:
     lxc:
       hosts:
-        authentik:
-          ansible_host: authentik.lan
         caddy:
           ansible_host: caddy.lan
         mealie:
