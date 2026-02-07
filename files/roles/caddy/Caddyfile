@@ -4,12 +4,6 @@
 	}
 }
 
-authentik.lab42.me {
-	import cloudflare
-	encode zstd gzip
-	reverse_proxy 10.42.20.195:9000
-}
-
 immich.lab42.me {
 	import cloudflare
 	encode zstd gzip
