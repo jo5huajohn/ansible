@@ -1,0 +1,23 @@
+http:
+  routers:
+    paperless:
+      entryPoints:
+        - websecure
+      rule: "Host(`paperless.dev.lab42.me`)"
+      tls:
+        certResolver: cf-resolver
+      service: paperless-service
+
+  services:
+    paperless-service:
+      loadBalancer:
+        servers:
+          - url: "http://paperless.lan:8000"
+        healthCheck:
+          path: ""
+          interval: "30s"
+          timeout: "10s"
+        passiveHealthCheck:
+          failureWindow: "2s"
+          maxFailedAttempts: 5
+        passHostHeader: true
