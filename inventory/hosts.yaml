@@ -3,8 +3,6 @@ prod:
   children:
     lxc:
       hosts:
-        caddy:
-          ansible_host: caddy.lan
         mealie:
           ansible_host: mealie.lan
         nextcloud:
