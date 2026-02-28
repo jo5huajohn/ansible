@@ -69,36 +69,6 @@
         project_src: "{{ pocket_id_dir }}"
         state: present
 
-- name: Install caddy
-  hosts: caddy
-  tasks:
-   # See https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes
-    - name: Set read buffer size to 7.5 MB
-      ansible.posix.sysctl:
-        name: net.core.rmem_max
-        value: 7500000
-        state: present
-      ignore_errors: true
-      register: caddy_ignore_errors_register_rmem
-
-    - name: Set write buffer size to 7.5 MB
-      ansible.posix.sysctl:
-        name: net.core.wmem_max
-        value: 7500000
-        state: present
-      ignore_errors: true
-      register: caddy_ignore_errors_register_wmem
-
-    - name: Copy Caddyfile
-      ansible.builtin.copy:
-        src: files/roles/caddy/Caddyfile
-        dest: "{{ caddy_dir }}/Caddyfile"
-        mode: '0770'
-
-    - name: Install caddy-cloudflare
-      ansible.builtin.include_role:
-        name: caddy
-
 - name: Install immich
   hosts: immich
   tasks:
