@@ -116,6 +116,49 @@
       ansible.builtin.include_role:
         name: nextcloud
 
+- name: Install OpenCloud.
+  hosts: opencloud
+  tasks:
+    - name: Create OpenCloud directories.
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0660'
+        group: root
+        owner: root
+      loop:
+        - "{{ opencloud_config_dir }}"
+        - "{{ opencloud_data_dir }}"
+        - "{{ radicale_data_dir }}"
+
+    - name: Copy OpenCloud directory.
+      ansible.builtin.copy:
+        src: files/opencloud/
+        dest: "{{ opencloud_dir }}/"
+        mode: "0660"
+        group: root
+        owner: root
+
+    - name: Template .env file.
+      ansible.builtin.template:
+        src: templates/opencloud/.env.j2
+        dest: "{{ opencloud_dir }}/.env"
+        mode: "0660"
+        group: root
+        owner: root
+
+    - name: Deploy OpenCloud with docker-compose.
+      community.docker.docker_compose_v2:
+        project_src: "{{ opencloud_dir }}"
+        state: present
+        files:
+          - docker-compose.yml
+          - external-proxy/opencloud-exposed.yml
+          - radicale/radicale.yml
+          - idm/external-idp.yml
+        env_files:
+          - .env
+
 - name: Install paperless
   hosts: paperless
   tasks:
