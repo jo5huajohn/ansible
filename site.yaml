@@ -109,13 +109,6 @@
         project_src: "{{ mealie_dir }}"
         state: present
 
-- name: Install nextcloud
-  hosts: nextcloud
-  tasks:
-    - name: Install nextcloud
-      ansible.builtin.include_role:
-        name: nextcloud
-
 - name: Install OpenCloud.
   hosts: opencloud
   tasks:

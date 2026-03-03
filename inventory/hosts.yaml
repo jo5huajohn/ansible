@@ -5,8 +5,6 @@ prod:
       hosts:
         mealie:
           ansible_host: mealie.lan
-        nextcloud:
-          ansible_host: nextcloud.lan
         opencloud:
           ansible_host: opencloud.lan
         paperless:
