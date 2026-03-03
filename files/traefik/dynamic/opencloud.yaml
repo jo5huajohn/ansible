@@ -1,0 +1,23 @@
+http:
+  routers:
+    opencloud:
+      entryPoints:
+        - websecure
+      rule: "Host(`opencloud.dev.lab42.me`)"
+      tls:
+        certResolver: cf-resolver
+      service: opencloud-service
+
+  services:
+    opencloud-service:
+      loadBalancer:
+        servers:
+          - url: "http://opencloud.lan:9200"
+        healthCheck:
+          path: ""
+          interval: "30s"
+          timeout: "3s"
+        passiveHealthCheck:
+          failureWindow: "3s"
+          maxFailedAttempts: 3
+        passHostHeader: true
