@@ -3,6 +3,8 @@ prod:
   children:
     lxc:
       hosts:
+        actual:
+          ansible_host: actual.lan
         mealie:
           ansible_host: mealie.lan
         opencloud:
