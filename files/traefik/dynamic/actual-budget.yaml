@@ -1,0 +1,23 @@
+http:
+  routers:
+    actual-budget:
+      entryPoints:
+        - websecure
+      rule: "Host(`budget.dev.lab42.me`)"
+      tls:
+        certResolver: cf-resolver
+      service: actual-budget-service
+
+  services:
+    actual-budget-service:
+      loadBalancer:
+        servers:
+          - url: "http://actual.lan:5006"
+        healthCheck:
+          path: ""
+          interval: "30s"
+          timeout: "3s"
+        passiveHealthCheck:
+          failureWindow: "3s"
+          maxFailedAttempts: 3
+        passHostHeader: true
