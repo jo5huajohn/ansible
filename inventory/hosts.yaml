@@ -5,6 +5,8 @@ prod:
       hosts:
         actual:
           ansible_host: actual.lan
+        influxdb:
+          ansible_host: influxdb.lan
         mealie:
           ansible_host: mealie.lan
         opencloud:
