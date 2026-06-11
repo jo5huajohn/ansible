@@ -29,6 +29,58 @@
         reboot_timeout: 600
         msg: "Reboot to propagate Proxmox host DNS settings to resolvconf."
 
+- name: Install InfluxDB.
+  hosts: influxdb
+  tasks:
+    - name: Install pip for plugins.
+      ansible.builtin.apt:
+        name:
+          - pip
+          - virtualenv
+        state: present
+
+    - name: Create InfluxDB directory.
+      ansible.builtin.file:
+        path: "{{ influxdb_dir }}"
+        state: directory
+        owner: 1500
+        group: 1500
+        mode: '0770'
+
+    - name: Create InfluxDB data and plugin directories.
+      ansible.builtin.file:
+        path: "{{ influxdb_dir }}/{{ item }}"
+        state: directory
+        owner: 1500
+        group: 1500
+        mode: '0770'
+      loop:
+        - data
+        - plugins
+
+    - name: Pull InfluxDB image.
+      community.docker.docker_image:
+        name: influxdb:3-core
+        source: pull
+
+    - name: Create InfluxDB container.
+      community.docker.docker_container:
+        name: influxdb3
+        image: influxdb:3-core
+        state: started
+        restart_policy: unless-stopped
+        ports:
+          - "8181:8181"
+        volumes:
+          - "{{ influxdb_dir }}/data:/var/lib/influxdb3/data"
+          - "{{ influxdb_dir }}/plugins:/var/lib/influxdb3/plugins"
+        command: >
+          influxdb3 serve
+          --node-id=pve01
+          --object-store=file
+          --data-dir=/var/lib/influxdb3/data
+          --plugin-dir=/var/lib/influxdb3/plugins
+
 - name: Install Traefik.
   hosts: traefik
   tasks:
