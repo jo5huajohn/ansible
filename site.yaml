@@ -1,20 +1,16 @@
 ---
-- name: Install docker on all servers
-  hosts: prod
-  become: true
-  tasks:
-    - name: Update apt cache
-      ansible.builtin.apt:
-        update_cache: true
-
-    - name: Install docker
-      ansible.builtin.include_role:
-        name: geerlingguy.docker
-
 - name: Setup servers.
   hosts: prod
   become: true
   tasks:
+    - name: Update apt cache.
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install Docker.
+      ansible.builtin.include_role:
+        name: geerlingguy.docker
+
     - name: Install resolvconf on Debian 12+.
       ansible.builtin.apt:
         name: resolvconf
@@ -39,24 +35,17 @@
           - virtualenv
         state: present
 
-    - name: Create InfluxDB directory.
+    - name: Create InfluxDB directories.
       ansible.builtin.file:
-        path: "{{ influxdb_dir }}"
-        state: directory
-        owner: 1500
-        group: 1500
-        mode: '0770'
-
-    - name: Create InfluxDB data and plugin directories.
-      ansible.builtin.file:
-        path: "{{ influxdb_dir }}/{{ item }}"
+        path: "{{ item }}"
         state: directory
         owner: 1500
         group: 1500
         mode: '0770'
       loop:
-        - data
-        - plugins
+        - "{{ influxdb_dir }}"
+        - "{{ influxdb_dir }}/data"
+        - "{{ influxdb_dir }}/plugins"
 
     - name: Pull InfluxDB image.
       community.docker.docker_image:
