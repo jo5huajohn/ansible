@@ -1,20 +1,20 @@
 ---
-- name: Install docker on all servers
-  hosts: prod
-  become: true
-  tasks:
-    - name: Update apt cache
-      ansible.builtin.apt:
-        update_cache: true
-
-    - name: Install docker
-      ansible.builtin.include_role:
-        name: geerlingguy.docker
-
 - name: Setup servers.
   hosts: prod
   become: true
   tasks:
+    - name: Update apt cache.
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Upgrade all apps in image.
+      ansible.builtin.apt:
+        upgrade: full
+
+    - name: Install Docker.
+      ansible.builtin.include_role:
+        name: geerlingguy.docker
+
     - name: Install resolvconf on Debian 12+.
       ansible.builtin.apt:
         name: resolvconf
@@ -39,47 +39,57 @@
           - virtualenv
         state: present
 
-    - name: Create InfluxDB directory.
+    - name: Create InfluxDB directories.
       ansible.builtin.file:
-        path: "{{ influxdb_dir }}"
-        state: directory
-        owner: 1500
-        group: 1500
-        mode: '0770'
-
-    - name: Create InfluxDB data and plugin directories.
-      ansible.builtin.file:
-        path: "{{ influxdb_dir }}/{{ item }}"
+        path: "{{ item }}"
         state: directory
         owner: 1500
         group: 1500
         mode: '0770'
       loop:
-        - data
-        - plugins
+        - "{{ influxdb_dir }}"
+        - "{{ influxdb_dir }}/config"
+        - "{{ influxdb_dir }}/data"
+
+    - name: Template .env file.
+      ansible.builtin.template:
+        src: templates/influxdb2/.env.j2
+        dest: "{{ influxdb_dir }}/.env"
+        mode: '0660'
 
     - name: Pull InfluxDB image.
       community.docker.docker_image:
-        name: influxdb:3-core
+        name: influxdb:2
         source: pull
 
     - name: Create InfluxDB container.
       community.docker.docker_container:
-        name: influxdb3
-        image: influxdb:3-core
+        name: influxdb
+        image: influxdb:2
+        env_file: "{{ influxdb_dir }}/.env"
         state: started
         restart_policy: unless-stopped
         ports:
-          - "8181:8181"
+          - "8086:8086"
         volumes:
-          - "{{ influxdb_dir }}/data:/var/lib/influxdb3/data"
-          - "{{ influxdb_dir }}/plugins:/var/lib/influxdb3/plugins"
-        command: >
-          influxdb3 serve
-          --node-id=pve01
-          --object-store=file
-          --data-dir=/var/lib/influxdb3/data
-          --plugin-dir=/var/lib/influxdb3/plugins
+          - "{{ influxdb_dir }}/config:/etc/influxdb2"
+          - "{{ influxdb_dir }}/data:/var/lib/influxdb2"
+
+- name: Install Grafana
+  hosts: grafana
+  tasks:
+    - name: Pull Grafana image.
+      community.docker.docker_image:
+        name: grafana/grafana
+        source: pull
+
+    - name: Create Grafana container.
+      community.docker.docker_container:
+        name: grafana
+        image: grafana/grafana:main
+        state: started
+        restart_policy: unless-stopped
+        ports: 3000:3000
 
 - name: Install Traefik.
   hosts: traefik
