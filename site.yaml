@@ -75,6 +75,22 @@
           - "{{ influxdb_dir }}/config:/etc/influxdb2"
           - "{{ influxdb_dir }}/data:/var/lib/influxdb2"
 
+- name: Install Grafana
+  hosts: grafana
+  tasks:
+    - name: Pull Grafana image.
+      community.docker.docker_image:
+        name: grafana/grafana
+        source: pull
+
+    - name: Create Grafana container.
+      community.docker.docker_container:
+        name: grafana
+        image: grafana/grafana:main
+        state: started
+        restart_policy: unless-stopped
+        ports: 3000:3000
+
 - name: Install Traefik.
   hosts: traefik
   tasks:
