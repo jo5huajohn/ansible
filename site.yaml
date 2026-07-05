@@ -7,6 +7,10 @@
       ansible.builtin.apt:
         update_cache: true
 
+    - name: Upgrade all apps in image.
+      ansible.builtin.apt:
+        upgrade: full
+
     - name: Install Docker.
       ansible.builtin.include_role:
         name: geerlingguy.docker
@@ -44,31 +48,32 @@
         mode: '0770'
       loop:
         - "{{ influxdb_dir }}"
+        - "{{ influxdb_dir }}/config"
         - "{{ influxdb_dir }}/data"
-        - "{{ influxdb_dir }}/plugins"
+
+    - name: Template .env file.
+      ansible.builtin.template:
+        src: templates/influxdb2/.env.j2
+        dest: "{{ influxdb_dir }}/.env"
+        mode: '0660'
 
     - name: Pull InfluxDB image.
       community.docker.docker_image:
-        name: influxdb:3-core
+        name: influxdb:2
         source: pull
 
     - name: Create InfluxDB container.
       community.docker.docker_container:
-        name: influxdb3
-        image: influxdb:3-core
+        name: influxdb
+        image: influxdb:2
+        env_file: "{{ influxdb_dir }}/.env"
         state: started
         restart_policy: unless-stopped
         ports:
-          - "8181:8181"
+          - "8086:8086"
         volumes:
-          - "{{ influxdb_dir }}/data:/var/lib/influxdb3/data"
-          - "{{ influxdb_dir }}/plugins:/var/lib/influxdb3/plugins"
-        command: >
-          influxdb3 serve
-          --node-id=pve01
-          --object-store=file
-          --data-dir=/var/lib/influxdb3/data
-          --plugin-dir=/var/lib/influxdb3/plugins
+          - "{{ influxdb_dir }}/config:/etc/influxdb2"
+          - "{{ influxdb_dir }}/data:/var/lib/influxdb2"
 
 - name: Install Traefik.
   hosts: traefik
