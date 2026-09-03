@@ -1,0 +1,23 @@
+http:
+  routers:
+    home-assistant:
+      entryPoints:
+        - websecure
+      rule: "Host(`hass.lab42.me`)"
+      tls:
+        certResolver: cf-resolver
+      service: home-assistant-service
+
+  services:
+    home-assistant-service:
+      loadBalancer:
+        servers:
+          - url: "http://homeassistant.lan:8123"
+        healthCheck:
+          path: ""
+          interval: "30s"
+          timeout: "3s"
+        passiveHealthCheck:
+          failureWindow: "3s"
+          maxFailedAttempts: 3
+        passHostHeader: true
