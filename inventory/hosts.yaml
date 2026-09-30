@@ -22,7 +22,7 @@ prod:
     vms:
       hosts:
         immich:
-          ansible_host: 10.42.20.194
+          ansible_host: ubuntu.lan
         microfridge:
           ansible_host: microfridge
           ansible_user: aniseed
