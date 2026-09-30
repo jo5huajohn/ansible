@@ -23,17 +23,3 @@ prod:
       hosts:
         immich:
           ansible_host: 10.42.20.194
-k8s_prod:
-  children:
-    server:
-      hosts:
-        10.42.20.10:
-    agent:
-      hosts:
-        10.42.20.15:
-        10.42.20.30:
-        10.42.20.31:
-    hardware:
-      hosts:
-        10.42.20.10:
-        10.42.20.15:
