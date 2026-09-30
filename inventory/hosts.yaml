@@ -23,3 +23,7 @@ prod:
       hosts:
         immich:
           ansible_host: 10.42.20.194
+        microfridge:
+          ansible_host: microfridge
+          ansible_user: aniseed
+          ansible_ssh_private_key_file: /root/.ssh/aniseed

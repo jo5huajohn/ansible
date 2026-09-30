@@ -290,3 +290,69 @@
       community.docker.docker_compose_v2:
         project_src: "{{ actual_dir }}"
         state: present
+
+- name: Create Microfridge - OpenWrt Dev VM + Image Builder.
+  hosts: microfridge
+  become: true
+  tasks:
+    - name: Install dependencies.
+      ansible.builtin.apt:
+        name:
+          - bc
+          - binutils-gold
+          - bison
+          - build-essential
+          - bzip2
+          - ccache
+          - clang-tidy
+          - clang-tools
+          - clang
+          - clangd
+          - curl
+          - ecj
+          - fastjar
+          - file
+          - flex
+          - g++
+          - gawk
+          - gcc
+          - gcc-arm*
+          - gettext
+          - git
+          - glibc-source
+          - help2man
+          - libbsd-dev
+          - libelf-dev
+          - liblzma-dev
+          - libncurses-dev
+          - libssl-dev
+          - make
+          - meson
+          - mold
+          - mtd-utils
+          - ninja-build
+          - pbzip2
+          - pigz
+          - pkg-config
+          - python3-dev
+          - python3-setuptools
+          - rsync
+          - subversion
+          - swig
+          - texinfo
+          - time
+          - u-boot-tools
+          - unzip
+          - wget
+          - xsltproc
+          - xxd
+          - zlib1g-dev
+          - zstd
+        state: present
+        update_cache: true
+
+    - name: Run LLVM installation script
+      ansible.builtin.shell: |
+        bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+      args:
+        executable: /bin/bash
