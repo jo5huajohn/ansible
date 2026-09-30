@@ -196,7 +196,7 @@
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
-        mode: '0660'
+        mode: '0750'
         group: root
         owner: root
       loop:
@@ -208,7 +208,7 @@
       ansible.builtin.copy:
         src: files/opencloud/
         dest: "{{ opencloud_dir }}/"
-        mode: "0660"
+        mode: "0750"
         group: root
         owner: root
 
