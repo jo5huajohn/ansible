@@ -232,10 +232,10 @@
         env_files:
           - .env
 
-- name: Install paperless
+- name: Install Paperless-ngx.
   hosts: paperless
   tasks:
-    - name: Create paperless directories
+    - name: Create Paperless-ngx directories.
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
