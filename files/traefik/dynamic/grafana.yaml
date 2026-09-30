@@ -1,0 +1,23 @@
+http:
+  routers:
+    grafana:
+      entryPoints:
+        - websecure
+      rule: "Host(`grafana.dev.lab42.me`)"
+      tls:
+        certResolver: cf-resolver
+      service: grafana-service
+
+  services:
+    grafana-service:
+      loadBalancer:
+        servers:
+          - url: "http://grafana.lan:3000"
+        healthCheck:
+          path: ""
+          interval: "30s"
+          timeout: "3s"
+        passiveHealthCheck:
+          failureWindow: "3s"
+          maxFailedAttempts: 3
+        passHostHeader: true
