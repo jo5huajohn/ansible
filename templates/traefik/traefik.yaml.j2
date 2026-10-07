@@ -79,6 +79,13 @@ log:
   #
 #  filePath: /path/to/log/log.txt
 
+metrics:
+  influxDB2:
+    address: "{{ traefik_metrics_influxdb2_address }}"
+    token: "{{ traefik_metrics_influxdb2_token }}"
+    org: "{{ traefik_metrics_influxdb2_org }}"
+    bucket: "{{ traefik_metrics_influxdb2_bucket }}"
+
   # Format is either "json", "common", or "genericCLF".
   # - "common": Traefik's extended CLF format (default)
   # - "genericCLF": Standard CLF format compatible with standard log analyzers
