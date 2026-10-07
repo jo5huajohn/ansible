@@ -4,7 +4,7 @@
 - name: Run Traefik container
   community.docker.docker_container:
     name: traefik
-    image: traefik:v3.6
+    image: traefik:v3.7
     state: started
     restart_policy: unless-stopped
     recreate: true

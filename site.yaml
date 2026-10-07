@@ -104,13 +104,13 @@
       ansible.builtin.template:
         src: templates/traefik/traefik.env.j2
         dest: "{{ traefik_dir }}/traefik.env"
-        mode: '0644'
+        mode: '0640'
 
     - name: Copy Traefik static config.
-      ansible.builtin.copy:
-        src: files/traefik/traefik.yaml
+      ansible.builtin.template:
+        src: templates/traefik/traefik.yaml.j2
         dest: "{{ traefik_dir }}/traefik.yaml"
-        mode: '0644'
+        mode: '0640'
 
     - name: Copy Traefik dynamic config.
       ansible.builtin.copy:
