@@ -18,3 +18,7 @@ roles:
     src: https://github.com/jo5huajohn/ansible-role-mealie.git
     scm: git
     version: v0.1.0
+  - name: jo5huajohn.pocket-id
+    src: https://github.com/jo5huajohn/ansible-role-pocket-id.git
+    scm: git
+    version: 1.0.0
