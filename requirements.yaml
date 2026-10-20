@@ -14,6 +14,10 @@ roles:
     version: 3.1.1
   - name: paperless_ngx.paperless_ngx
     version: 4.1.0
+  - name: jo5huajohn.actual-budget
+    src: https://github.com/jo5huajohn/ansible-role-actual-budget.git
+    scm: git
+    version: 0.1.0
   - name: jo5huajohn.mealie
     src: https://github.com/jo5huajohn/ansible-role-mealie.git
     scm: git
